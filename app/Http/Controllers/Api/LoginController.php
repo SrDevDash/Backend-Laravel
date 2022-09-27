@@ -18,7 +18,7 @@ class LoginController extends Controller
 
         if(Auth::attempt($request->only('email','password'))){
             return response()->json([
-                'token' => $request->user()->createToken($request->name)->plainTextToken,
+                'token' => $request->user()->createToken($request->email)->plainTextToken,
                 'message' => 'Success',
             ]);
         }
@@ -34,7 +34,6 @@ class LoginController extends Controller
         return $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            'name' => 'required'
         ]);
     }
 }

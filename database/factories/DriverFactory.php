@@ -21,7 +21,8 @@ class DriverFactory extends Factory
             'first_name' => fake()->name(),
             'active' => true,
 
-
+            'ssd' => fake()->text(200),
+            'dob' => fake()->date(),
         ];
     }
 }

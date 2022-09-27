@@ -16,7 +16,7 @@ class DriverController extends Controller
      */
     public function index()
     {
-        return DriverResource::collection(Drive::lasest()->paginate());
+        return DriverResource::collection(Driver::lasest()->paginate());
     }
 
     /**
@@ -27,7 +27,32 @@ class DriverController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            "last_name" => 'required',
+            "first_name"=> 'required',
+            "active" => 'required',
+            "ssd" => 'required',
+            "dob" => 'required',
+        ]);
 
+        $driver = new Driver([
+            "last_name" => $request->get('last_name'),
+            "first_name"=> $request->get('first_name'),
+            "active" => $request->get('active'),
+            "address" => $request->get('address'),
+            "city" => $request->get('city'),
+            "zip" => $request->get('zip'),
+            "phone" => $request->get('phone'),
+            "dob" => $request->dob,
+            "ssd" => $request->ssd
+        ]);
+
+        $driver->save();
+
+        return response()->json([
+            'message' => 'Driver created',
+            'data' => $driver,
+        ],201);
     }
 
     /**
@@ -48,10 +73,30 @@ class DriverController extends Controller
      * @param  \App\Models\Driver  $driver
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Driver $driver)
+    public function update(Request $request, $id)
     {
-        $driver->update($request->all());
-        return $driver;
+        $driver = Driver::find($id);
+
+        if(isset($driver)){
+            $driver->last_name = $request->last_name;
+            $driver->first_name = $request->first_name;
+            $driver->active = $request->active;
+            $driver->address = $request->address;
+            $driver->city = $request->city;
+            $driver->zip = $request->zip;
+            $driver->phone = $request->phone;
+
+            $driver->save();
+
+            return response()->json([
+                'message' =>'Driver updated',
+                'data' => $driver
+            ],200);
+        }
+
+        return response()->json([
+            'message' => 'Driver not found'
+        ],404);
     }
 
     /**
@@ -60,13 +105,17 @@ class DriverController extends Controller
      * @param  \App\Models\Driver  $driver
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Driver $driver)
+    public function destroy($id)
     {
-        if($driver->delete()) {
+        $driver = Driver::find($id);
+
+        if(isset($driver)) {
+            $driver->delete();
             return response()->json([
-                'message' => 'Success'
-            ],204);
+                'message' => 'Driver deleted'
+            ],200);
         }
+
         return response()->json([
             'message' => 'Driver Not Found'
         ],404);

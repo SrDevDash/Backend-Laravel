@@ -13,20 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('drivers', function (Blueprint $table) {
+        Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
-            $table->string('last_name');
-            $table->string('first_name');
+            $table->string('description');
+            $table->integer('year');
+            $table->integer('make');
+            $table->integer('capacity');
             $table->boolean('active');
-            // add SSD and DOB
-            $table->string('ssd')->unique();
-            $table->date('dob');
-
-            $table->string('address')->default('');
-            $table->string('city')->default('');
-            $table->string('zip')->default('');
-            $table->bigInteger('phone')->default(0);
-
             $table->timestamps();
         });
     }
@@ -38,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('drivers');
+        Schema::dropIfExists('vehicles');
     }
 };

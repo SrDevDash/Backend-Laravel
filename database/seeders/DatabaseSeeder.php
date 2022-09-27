@@ -22,5 +22,8 @@ class DatabaseSeeder extends Seeder
          ]);
 
         \App\Models\Driver::factory(10)->create();
+        \App\Models\Vehicle::factory(10)->create();
+        \App\Models\Route::factory(5)->create();
+        \App\Models\Schedules::factory(3)->create();
     }
 }
